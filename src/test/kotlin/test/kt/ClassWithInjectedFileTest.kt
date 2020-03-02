@@ -15,18 +15,34 @@ class ClassWithInjectedFileTest {
     lateinit var classToInject: ClassToInject
 
     @Inject
+    lateinit var classToInjectWithInterface: ClassToInjectWithInterface
+
+    @Inject
     lateinit var classWithInjectedFile: ClassWithInjectedFile
 
     @Test
-    fun `inject mock in classWithInjectedFile`() {
+    fun `inject mock classToInject`() {
         every { classToInject.exampleMethod() } returns "mock"
 
         val response = classWithInjectedFile.methodUnderTest()
         Assertions.assertEquals("mock", response)
     }
 
+    @Test
+    fun `inject mock classToInjectWithInterface`() {
+        every { classToInjectWithInterface.exampleMethod() } returns "mock"
+
+        val response = classWithInjectedFile.methodUnderTestWithInterface()
+        Assertions.assertEquals("mock", response)
+    }
+
     @MockBean(ClassToInject::class)
     fun mockClassToInject(): ClassToInject {
+        return mockk()
+    }
+
+    @MockBean(ClassToInjectWithInterface::class)
+    fun mockClassToInjectWithInterface(): ClassToInjectWithInterface {
         return mockk()
     }
 }
